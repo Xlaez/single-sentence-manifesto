@@ -89,6 +89,7 @@ export function WordDraftModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isProcessing) return; // Prevent double submission
     setValidationError(null);
 
     if (modifierType !== 'period' && (!wordText || !wordText.trim())) {

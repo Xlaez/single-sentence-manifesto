@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS transactions (
   word_text TEXT NOT NULL,
   modifier_type TEXT NOT NULL,
   target_word_id TEXT,
+  placed_word_id TEXT,
   gateway_response TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   paid_at TIMESTAMPTZ

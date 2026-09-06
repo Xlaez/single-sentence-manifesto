@@ -41,6 +41,7 @@ export interface Transaction {
   wordText: string;
   modifierType: ModifierType;
   targetWordId?: string;
+  placedWordId?: string; // Idempotency link: guarantees 1 payment = exactly 1 word
   createdAt: string;
   paidAt?: string;
   gatewayResponse?: string;

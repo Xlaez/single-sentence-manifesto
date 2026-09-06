@@ -734,6 +734,63 @@ export async function updateTransactionStatus(
   return tx;
 }
 
+// ---------------------------------------------------------------------------
+// IDEMPOTENT TRANSACTION FULFILLMENT
+// Prevents duplicate charges, double-word placement, and race conditions
+// ---------------------------------------------------------------------------
+export async function fulfillTransaction(
+  reference: string,
+  payload: PlaceWordPayload,
+  paidAt?: string
+): Promise<{ word: Word; alreadyFulfilled: boolean; newChapterStarted?: boolean }> {
+  // 1. Idempotency Check: Has this transaction already placed a word?
+  const existingTx = await getTransaction(reference);
+
+  if (existingTx && existingTx.status === 'success' && existingTx.placedWordId) {
+    // Already fulfilled! Retrieve and return the existing word without duplicate insertion
+    const state = await getManifestoState();
+    const existingWord = state.words.find((w) => w.id === existingTx.placedWordId);
+    if (existingWord) {
+      return { word: existingWord, alreadyFulfilled: true };
+    }
+  }
+
+  // 2. Not fulfilled yet: Place the word
+  const placeResult = await placeWord(payload);
+
+  // 3. Atomically link placedWordId and set status = 'success'
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      await supabase
+        .from('transactions')
+        .update({
+          status: 'success',
+          placed_word_id: placeResult.word.id,
+          paid_at: paidAt || new Date().toISOString(),
+        })
+        .eq('reference', reference);
+    } catch (err) {
+      console.error('Supabase fulfillTransaction update failed:', err);
+    }
+  }
+
+  const data = readData();
+  const tx = data.transactions.find((t) => t.reference === reference);
+  if (tx) {
+    tx.status = 'success';
+    tx.placedWordId = placeResult.word.id;
+    tx.paidAt = paidAt || new Date().toISOString();
+    writeData(data);
+  }
+
+  return {
+    word: placeResult.word,
+    alreadyFulfilled: false,
+    newChapterStarted: placeResult.newChapterStarted,
+  };
+}
+
 export async function getTransaction(reference: string): Promise<Transaction | null> {
   const supabase = getSupabase();
   if (supabase) {

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { placeWord, updateTransactionStatus } from '@/lib/db';
+import { updateTransactionStatus, fulfillTransaction } from '@/lib/db';
 import { PlaceWordPayload } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -27,11 +27,7 @@ export async function POST(req: Request) {
       const reference = event.data?.reference;
       const metadata = event.data?.metadata || {};
 
-      if (reference) {
-        await updateTransactionStatus(reference, 'success', event.data?.paid_at);
-      }
-
-      if (metadata.wordText && metadata.authorHandle) {
+      if (reference && metadata.wordText && metadata.authorHandle) {
         const payload: PlaceWordPayload = {
           wordText: metadata.wordText,
           authorHandle: metadata.authorHandle,
@@ -39,7 +35,10 @@ export async function POST(req: Request) {
           modifierType: metadata.modifierType || 'standard',
           targetWordId: metadata.targetWordId,
         };
-        await placeWord(payload);
+        // Idempotently fulfill: safely deduplicates between frontend verify & backend webhook
+        await fulfillTransaction(reference, payload, event.data?.paid_at);
+      } else if (reference) {
+        await updateTransactionStatus(reference, 'success', event.data?.paid_at);
       }
     }
 

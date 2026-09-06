@@ -15,7 +15,7 @@
       "chapterNumber": 2,
       "title": "Chapter 2: The New Reckoning",
       "isClosed": false,
-      "totalWords": 3,
+      "totalWords": 4,
       "createdAt": "2026-09-06T13:59:10.055Z"
     }
   ],
@@ -177,9 +177,36 @@
         "skull": 0
       },
       "createdAt": "2026-09-06T14:40:56.479Z"
+    },
+    {
+      "id": "w-1788706207687-7w1u",
+      "chapterId": "chap-2",
+      "wordText": "unshakable",
+      "wordIndex": 4,
+      "authorHandle": "iron_clad",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T14:50:07.687Z"
     }
   ],
   "transactions": [
+    {
+      "reference": "sim_1788706065366_tb8bw",
+      "amount": 10000,
+      "currency": "NGN",
+      "status": "success",
+      "payerEmail": "iron_clad@manifesto.lol",
+      "authorHandle": "iron_clad",
+      "wordText": "unshakable",
+      "modifierType": "standard",
+      "id": "tx-1788706065368-ni7s",
+      "createdAt": "2026-09-06T14:47:45.368Z",
+      "placedWordId": "w-1788706207687-7w1u",
+      "paidAt": "2026-09-06T14:50:07.665Z"
+    },
     {
       "reference": "sim_1788705641361_ett27",
       "amount": 10000,

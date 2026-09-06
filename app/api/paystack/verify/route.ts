@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { placeWord, updateTransactionStatus } from '@/lib/db';
+import { placeWord, updateTransactionStatus, fulfillTransaction } from '@/lib/db';
 import { PlaceWordPayload } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -15,20 +15,23 @@ export async function POST(req: Request) {
 
     // 1. Handle Simulated Mode (for testing without live keys)
     if (reference.startsWith('sim_') && simulatedPayload) {
-      await updateTransactionStatus(reference, 'success');
-
-      const result = await placeWord({
-        wordText: simulatedPayload.wordText,
-        authorHandle: simulatedPayload.authorHandle,
-        authorUrl: simulatedPayload.authorUrl,
-        modifierType: simulatedPayload.modifierType,
-        targetWordId: simulatedPayload.targetWordId,
-      });
+      const result = await fulfillTransaction(
+        reference,
+        {
+          wordText: simulatedPayload.wordText,
+          authorHandle: simulatedPayload.authorHandle,
+          authorUrl: simulatedPayload.authorUrl,
+          modifierType: simulatedPayload.modifierType,
+          targetWordId: simulatedPayload.targetWordId,
+        },
+        new Date().toISOString()
+      );
 
       return NextResponse.json({
         success: true,
         word: result.word,
         newChapterStarted: result.newChapterStarted,
+        idempotentReplay: result.alreadyFulfilled,
       });
     }
 
@@ -54,8 +57,6 @@ export async function POST(req: Request) {
       );
     }
 
-    await updateTransactionStatus(reference, 'success', data.data.paid_at);
-
     const metadata = data.data.metadata || {};
     const payload: PlaceWordPayload = {
       wordText: metadata.wordText,
@@ -65,12 +66,14 @@ export async function POST(req: Request) {
       targetWordId: metadata.targetWordId,
     };
 
-    const result = await placeWord(payload);
+    // Idempotent fulfillment: placing word only once even if verified multiple times
+    const result = await fulfillTransaction(reference, payload, data.data.paid_at);
 
     return NextResponse.json({
       success: true,
       word: result.word,
       newChapterStarted: result.newChapterStarted,
+      idempotentReplay: result.alreadyFulfilled,
     });
   } catch (err) {
     console.error('Error in POST /api/paystack/verify:', err);
