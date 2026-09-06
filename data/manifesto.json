@@ -3,249 +3,173 @@
     {
       "id": "chap-1",
       "chapterNumber": 1,
-      "title": "Chapter I: The First Words of the Hivemind",
-      "isClosed": true,
-      "totalWords": 9,
-      "createdAt": "2026-09-06T12:57:47.071Z",
-      "closedByHandle": "master_closer",
-      "closedAt": "2026-09-06T13:59:10.055Z"
-    },
-    {
-      "id": "chap-2",
-      "chapterNumber": 2,
-      "title": "Chapter 2: The New Reckoning",
+      "title": "Chapter I: The Unfinished Apology of Civilization",
       "isClosed": false,
-      "totalWords": 5,
-      "createdAt": "2026-09-06T13:59:10.055Z"
+      "totalWords": 16,
+      "createdAt": "2026-09-06T15:00:00.000Z"
     }
   ],
   "words": [
     {
       "id": "w-1",
       "chapterId": "chap-1",
-      "wordText": "In",
+      "wordText": "History",
       "wordIndex": 1,
-      "authorHandle": "genesis_agent",
-      "authorUrl": "https://x.com",
+      "authorHandle": "the_chronicler",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 15,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T12:59:27.072Z"
+      "reactions": { "fire": 12, "skull": 0 },
+      "createdAt": "2026-09-06T15:01:00.000Z"
     },
     {
       "id": "w-2",
       "chapterId": "chap-1",
-      "wordText": "the",
+      "wordText": "will",
       "wordIndex": 2,
-      "authorHandle": "cyber_scribe",
+      "authorHandle": "the_chronicler",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 5,
-        "skull": 1
-      },
-      "createdAt": "2026-09-06T13:01:07.072Z"
+      "reactions": { "fire": 4, "skull": 0 },
+      "createdAt": "2026-09-06T15:02:00.000Z"
     },
     {
       "id": "w-3",
       "chapterId": "chap-1",
-      "wordText": "beginning",
+      "wordText": "remember",
       "wordIndex": 3,
-      "authorHandle": "philosopher_x",
+      "authorHandle": "prophet_zero",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 9,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T13:02:47.072Z"
+      "reactions": { "fire": 18, "skull": 1 },
+      "createdAt": "2026-09-06T15:03:00.000Z"
     },
     {
       "id": "w-4",
       "chapterId": "chap-1",
-      "wordText": "the",
+      "wordText": "that",
       "wordIndex": 4,
-      "authorHandle": "pixel_tycoon",
+      "authorHandle": "scribe_99",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 3,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T13:04:27.072Z"
+      "reactions": { "fire": 2, "skull": 0 },
+      "createdAt": "2026-09-06T15:04:00.000Z"
     },
     {
       "id": "w-5",
       "chapterId": "chap-1",
-      "wordText": "INTERNET",
+      "wordText": "civilization",
       "wordIndex": 5,
-      "authorHandle": "loud_keyboard",
-      "modifierType": "scream",
-      "reactions": {
-        "fire": 27,
-        "skull": 2
-      },
-      "createdAt": "2026-09-06T13:06:07.072Z"
+      "authorHandle": "anthropologist",
+      "modifierType": "standard",
+      "reactions": { "fire": 29, "skull": 2 },
+      "createdAt": "2026-09-06T15:05:00.000Z"
     },
     {
       "id": "w-6",
       "chapterId": "chap-1",
-      "wordText": "demanded",
+      "wordText": "collapsed",
       "wordIndex": 6,
-      "authorHandle": "shitpost_daily",
+      "authorHandle": "doomer_hq",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 12,
-        "skull": 1
-      },
-      "createdAt": "2026-09-06T13:07:47.072Z"
+      "reactions": { "fire": 35, "skull": 4 },
+      "createdAt": "2026-09-06T15:06:00.000Z"
     },
     {
       "id": "w-7",
       "chapterId": "chap-1",
-      "wordText": "chaos",
+      "wordText": "not",
       "wordIndex": 7,
-      "authorHandle": "anarchy_dev",
+      "authorHandle": "skeptic_x",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 42,
-        "skull": 3
-      },
-      "createdAt": "2026-09-06T13:09:27.072Z"
+      "reactions": { "fire": 6, "skull": 0 },
+      "createdAt": "2026-09-06T15:07:00.000Z"
     },
     {
-      "id": "w-1788703103741-clh1",
+      "id": "w-8",
       "chapterId": "chap-1",
-      "wordText": "unleashed",
+      "wordText": "from",
       "wordIndex": 8,
-      "authorHandle": "test_user",
+      "authorHandle": "grammar_police",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T13:58:23.741Z"
+      "reactions": { "fire": 3, "skull": 0 },
+      "createdAt": "2026-09-06T15:08:00.000Z"
     },
     {
-      "id": "w-1788703150055-5y0z",
+      "id": "w-9",
       "chapterId": "chap-1",
-      "wordText": ".",
+      "wordText": "artificial",
       "wordIndex": 9,
-      "authorHandle": "master_closer",
-      "modifierType": "period",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T13:59:10.055Z"
+      "authorHandle": "silicon_sage",
+      "modifierType": "standard",
+      "reactions": { "fire": 19, "skull": 1 },
+      "createdAt": "2026-09-06T15:09:00.000Z"
     },
     {
-      "id": "w-1788703787745-r8lf",
-      "chapterId": "chap-2",
-      "wordText": "Hello!",
-      "wordIndex": 1,
-      "authorHandle": "elonmusk",
-      "authorUrl": "https://elonmmusk.him",
+      "id": "w-10",
+      "chapterId": "chap-1",
+      "wordText": "intelligence,",
+      "wordIndex": 10,
+      "authorHandle": "altman_fan",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T14:09:47.745Z"
+      "reactions": { "fire": 48, "skull": 3 },
+      "createdAt": "2026-09-06T15:10:00.000Z"
     },
     {
-      "id": "w-1788704335229-yh5p",
-      "chapterId": "chap-2",
-      "wordText": "unstoppable",
-      "wordIndex": 2,
-      "authorHandle": "crypto_king",
+      "id": "w-11",
+      "chapterId": "chap-1",
+      "wordText": "but",
+      "wordIndex": 11,
+      "authorHandle": "plot_twist",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T14:18:55.229Z"
+      "reactions": { "fire": 14, "skull": 0 },
+      "createdAt": "2026-09-06T15:11:00.000Z"
     },
     {
-      "id": "w-1788705656479-qe21",
-      "chapterId": "chap-2",
-      "wordText": "legendary",
-      "wordIndex": 3,
-      "authorHandle": "king_scribe",
+      "id": "w-12",
+      "chapterId": "chap-1",
+      "wordText": "because",
+      "wordIndex": 12,
+      "authorHandle": "causality",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T14:40:56.479Z"
+      "reactions": { "fire": 8, "skull": 0 },
+      "createdAt": "2026-09-06T15:12:00.000Z"
     },
     {
-      "id": "w-1788706207687-7w1u",
-      "chapterId": "chap-2",
-      "wordText": "unshakable",
-      "wordIndex": 4,
-      "authorHandle": "iron_clad",
+      "id": "w-13",
+      "chapterId": "chap-1",
+      "wordText": "humanity",
+      "wordIndex": 13,
+      "authorHandle": "earthling_one",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T14:50:07.687Z"
+      "reactions": { "fire": 23, "skull": 2 },
+      "createdAt": "2026-09-06T15:13:00.000Z"
     },
     {
-      "id": "w-1788707171632-n91e",
-      "chapterId": "chap-2",
-      "wordText": "super-based",
-      "wordIndex": 5,
-      "authorHandle": "slang_master",
+      "id": "w-14",
+      "chapterId": "chap-1",
+      "wordText": "refused",
+      "wordIndex": 14,
+      "authorHandle": "rebel_scribe",
       "modifierType": "standard",
-      "reactions": {
-        "fire": 0,
-        "skull": 0
-      },
-      "createdAt": "2026-09-06T15:06:11.632Z"
+      "reactions": { "fire": 31, "skull": 1 },
+      "createdAt": "2026-09-06T15:14:00.000Z"
+    },
+    {
+      "id": "w-15",
+      "chapterId": "chap-1",
+      "wordText": "to",
+      "wordIndex": 15,
+      "authorHandle": "cliffhanger",
+      "modifierType": "standard",
+      "reactions": { "fire": 15, "skull": 0 },
+      "createdAt": "2026-09-06T15:15:00.000Z"
+    },
+    {
+      "id": "w-16",
+      "chapterId": "chap-1",
+      "wordText": "STOP",
+      "wordIndex": 16,
+      "authorHandle": "alarmist",
+      "modifierType": "scream",
+      "reactions": { "fire": 88, "skull": 9 },
+      "createdAt": "2026-09-06T15:16:00.000Z"
     }
   ],
-  "transactions": [
-    {
-      "reference": "sim_1788707164408_sw6xa",
-      "amount": 10000,
-      "currency": "NGN",
-      "status": "success",
-      "payerEmail": "slang_master@manifesto.lol",
-      "authorHandle": "slang_master",
-      "wordText": "super-based",
-      "modifierType": "standard",
-      "id": "tx-1788707164409-l3mp",
-      "createdAt": "2026-09-06T15:06:04.409Z",
-      "placedWordId": "w-1788707171632-n91e",
-      "paidAt": "2026-09-06T15:06:11.630Z"
-    },
-    {
-      "reference": "sim_1788706065366_tb8bw",
-      "amount": 10000,
-      "currency": "NGN",
-      "status": "success",
-      "payerEmail": "iron_clad@manifesto.lol",
-      "authorHandle": "iron_clad",
-      "wordText": "unshakable",
-      "modifierType": "standard",
-      "id": "tx-1788706065368-ni7s",
-      "createdAt": "2026-09-06T14:47:45.368Z",
-      "placedWordId": "w-1788706207687-7w1u",
-      "paidAt": "2026-09-06T14:50:07.665Z"
-    },
-    {
-      "reference": "sim_1788705641361_ett27",
-      "amount": 10000,
-      "currency": "NGN",
-      "status": "success",
-      "payerEmail": "scribe@gmail.com",
-      "authorHandle": "king_scribe",
-      "wordText": "legendary",
-      "modifierType": "standard",
-      "id": "tx-1788705641362-wyfp",
-      "createdAt": "2026-09-06T14:40:41.362Z",
-      "paidAt": "2026-09-06T14:40:56.477Z"
-    }
-  ]
+  "transactions": []
 }

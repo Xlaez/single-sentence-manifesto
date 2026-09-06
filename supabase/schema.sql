@@ -94,20 +94,29 @@ INSERT INTO chapters (id, chapter_number, title, is_closed, total_words, created
 VALUES (
   'chap-1',
   1,
-  'Chapter I: The First Words of the Hivemind',
+  'Chapter I: The Unfinished Apology of Civilization',
   false,
-  7,
+  16,
   NOW() - INTERVAL '1 hour'
 )
 ON CONFLICT (chapter_number) DO NOTHING;
 
 INSERT INTO words (id, chapter_id, word_text, word_index, author_handle, author_url, modifier_type, fire_reactions, skull_reactions, created_at)
 VALUES
-  ('w-1', 'chap-1', 'In', 1, 'genesis_agent', 'https://x.com', 'standard', 14, 0, NOW() - INTERVAL '58 minutes'),
-  ('w-2', 'chap-1', 'the', 2, 'cyber_scribe', null, 'standard', 5, 1, NOW() - INTERVAL '56 minutes'),
-  ('w-3', 'chap-1', 'beginning', 3, 'philosopher_x', null, 'standard', 9, 0, NOW() - INTERVAL '54 minutes'),
-  ('w-4', 'chap-1', 'the', 4, 'pixel_tycoon', null, 'standard', 3, 0, NOW() - INTERVAL '52 minutes'),
-  ('w-5', 'chap-1', 'INTERNET', 5, 'loud_keyboard', null, 'scream', 27, 2, NOW() - INTERVAL '50 minutes'),
-  ('w-6', 'chap-1', 'demanded', 6, 'shitpost_daily', null, 'standard', 12, 1, NOW() - INTERVAL '48 minutes'),
-  ('w-7', 'chap-1', 'chaos', 7, 'anarchy_dev', null, 'standard', 42, 3, NOW() - INTERVAL '46 minutes')
+  ('w-1', 'chap-1', 'History', 1, 'the_chronicler', null, 'standard', 12, 0, NOW() - INTERVAL '58 minutes'),
+  ('w-2', 'chap-1', 'will', 2, 'the_chronicler', null, 'standard', 4, 0, NOW() - INTERVAL '56 minutes'),
+  ('w-3', 'chap-1', 'remember', 3, 'prophet_zero', null, 'standard', 18, 1, NOW() - INTERVAL '54 minutes'),
+  ('w-4', 'chap-1', 'that', 4, 'scribe_99', null, 'standard', 2, 0, NOW() - INTERVAL '52 minutes'),
+  ('w-5', 'chap-1', 'civilization', 5, 'anthropologist', null, 'standard', 29, 2, NOW() - INTERVAL '50 minutes'),
+  ('w-6', 'chap-1', 'collapsed', 6, 'doomer_hq', null, 'standard', 35, 4, NOW() - INTERVAL '48 minutes'),
+  ('w-7', 'chap-1', 'not', 7, 'skeptic_x', null, 'standard', 6, 0, NOW() - INTERVAL '46 minutes'),
+  ('w-8', 'chap-1', 'from', 8, 'grammar_police', null, 'standard', 3, 0, NOW() - INTERVAL '44 minutes'),
+  ('w-9', 'chap-1', 'artificial', 9, 'silicon_sage', null, 'standard', 19, 1, NOW() - INTERVAL '42 minutes'),
+  ('w-10', 'chap-1', 'intelligence,', 10, 'altman_fan', null, 'standard', 48, 3, NOW() - INTERVAL '40 minutes'),
+  ('w-11', 'chap-1', 'but', 11, 'plot_twist', null, 'standard', 14, 0, NOW() - INTERVAL '38 minutes'),
+  ('w-12', 'chap-1', 'because', 12, 'causality', null, 'standard', 8, 0, NOW() - INTERVAL '36 minutes'),
+  ('w-13', 'chap-1', 'humanity', 13, 'earthling_one', null, 'standard', 23, 2, NOW() - INTERVAL '34 minutes'),
+  ('w-14', 'chap-1', 'refused', 14, 'rebel_scribe', null, 'standard', 31, 1, NOW() - INTERVAL '32 minutes'),
+  ('w-15', 'chap-1', 'to', 15, 'cliffhanger', null, 'standard', 15, 0, NOW() - INTERVAL '30 minutes'),
+  ('w-16', 'chap-1', 'STOP', 16, 'alarmist', null, 'scream', 88, 9, NOW() - INTERVAL '28 minutes')
 ON CONFLICT (id) DO NOTHING;
