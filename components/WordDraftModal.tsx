@@ -2,66 +2,49 @@
 
 import React, { useState, useEffect } from 'react';
 import { Word, ModifierType } from '@/lib/types';
-import { X, Flame, ShieldAlert, Scissors, Megaphone, CheckCircle2, Lock, Sparkles, CreditCard } from 'lucide-react';
+import { X, Scissors, CreditCard, Sparkles, AlertCircle } from 'lucide-react';
 import { typewriterAudio } from '@/lib/audio';
+import { SupportedCurrency, getPriceDisplay } from '@/lib/paystack';
 
 interface WordDraftModalProps {
   isOpen: boolean;
   onClose: () => void;
   targetWord?: Word | null;
   currentWordCount: number;
-  onSubmit: (payload: {
-    wordText: string;
-    authorHandle: string;
-    authorUrl?: string;
-    modifierType: ModifierType;
-    targetWordId?: string;
-  }) => Promise<void>;
+  onSuccessPlaced: (word: Word) => void;
 }
 
 interface PowerUpOption {
   type: ModifierType;
   title: string;
-  price: string;
   desc: string;
-  badge: string;
 }
 
 const POWER_UPS: PowerUpOption[] = [
   {
     type: 'standard',
     title: 'Standard Word',
-    price: '$1.00',
     desc: 'Append exactly one word to the active sentence.',
-    badge: 'Standard',
   },
   {
     type: 'veto',
     title: 'The Veto (Strikethrough)',
-    price: '$2.00',
     desc: 'Cross out the previous word in blood-red ink and replace it.',
-    badge: 'Sabotage',
   },
   {
     type: 'scream',
     title: 'ALL-CAPS SCREAM',
-    price: '$2.00',
     desc: 'Enlarged bold typography encased in an ink stamp.',
-    badge: 'Loud',
   },
   {
     type: 'redacted',
     title: 'CIA Redaction',
-    price: '$1.00',
     desc: 'Blacked-out classified bar. Clickable to reveal original text.',
-    badge: 'Classified',
   },
   {
     type: 'period',
     title: 'The Period (Closer)',
-    price: '$5.00',
     desc: 'End this chapter forever, crown yourself Closer, and spawn Chapter N+1.',
-    badge: 'Finale',
   },
 ];
 
@@ -70,14 +53,16 @@ export function WordDraftModal({
   onClose,
   targetWord,
   currentWordCount,
-  onSubmit,
+  onSuccessPlaced,
 }: WordDraftModalProps) {
   const [modifierType, setModifierType] = useState<ModifierType>('standard');
+  const [currency, setCurrency] = useState<SupportedCurrency>('USD');
   const [wordText, setWordText] = useState('');
   const [authorHandle, setAuthorHandle] = useState('');
+  const [authorEmail, setAuthorEmail] = useState('');
   const [authorUrl, setAuthorUrl] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (targetWord) {
@@ -89,14 +74,12 @@ export function WordDraftModal({
 
   if (!isOpen) return null;
 
-  const currentPrice = POWER_UPS.find((p) => p.type === modifierType)?.price || '$1.00';
+  const currentPriceDisplay = getPriceDisplay(modifierType, currency);
 
   const handleWordChange = (val: string) => {
-    // Only mechanical sound on input
     typewriterAudio.playClack();
     setValidationError(null);
 
-    // Prevent spacebar or multiple words
     if (val.includes(' ')) {
       setValidationError('Strictly ONE word allowed! Spaces are forbidden.');
       return;
@@ -124,27 +107,80 @@ export function WordDraftModal({
     }
 
     try {
-      setIsSubmitting(true);
+      setIsProcessing(true);
       typewriterAudio.playCarriageReturn();
 
-      await onSubmit({
-        wordText: modifierType === 'period' ? '.' : wordText.trim(),
-        authorHandle: authorHandle.trim(),
-        authorUrl: authorUrl.trim() || undefined,
-        modifierType,
-        targetWordId: targetWord?.id,
+      // 1. Initialize session with backend
+      const initRes = await fetch('/api/paystack/initialize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: authorEmail.trim() || undefined,
+          wordText: modifierType === 'period' ? '.' : wordText.trim(),
+          authorHandle: authorHandle.trim(),
+          authorUrl: authorUrl.trim() || undefined,
+          modifierType,
+          targetWordId: targetWord?.id,
+          currency,
+        }),
       });
 
-      // Clear state
-      setWordText('');
-      setAuthorHandle('');
-      setAuthorUrl('');
-      onClose();
+      const initData = await initRes.json();
+      if (!initRes.ok || !initData.success) {
+        throw new Error(initData.error || 'Failed to initialize payment.');
+      }
+
+      // 2A. Simulated mode (when Paystack live keys are pending)
+      if (initData.isSimulated) {
+        const verifyRes = await fetch('/api/paystack/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reference: initData.reference,
+            simulatedPayload: initData.metadata,
+          }),
+        });
+        const verifyData = await verifyRes.json();
+        if (!verifyRes.ok || !verifyData.success) {
+          throw new Error(verifyData.error || 'Failed to place word.');
+        }
+
+        typewriterAudio.playClack();
+        onSuccessPlaced(verifyData.word);
+        onClose();
+        return;
+      }
+
+      // 2B. Real Paystack Inline Modal
+      const { default: PaystackPop } = await import('@paystack/inline-js');
+      const popup = new PaystackPop();
+
+      popup.resumeTransaction(initData.accessCode, {
+        onSuccess: async (transaction) => {
+          try {
+            const verifyRes = await fetch('/api/paystack/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ reference: transaction.reference }),
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success && verifyData.word) {
+              typewriterAudio.playClack();
+              onSuccessPlaced(verifyData.word);
+              onClose();
+            }
+          } catch (vErr) {
+            console.error('Failed to verify Paystack transaction:', vErr);
+          }
+        },
+        onCancel: () => {
+          setIsProcessing(false);
+        },
+      });
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Transaction failed. Please try again.';
       setValidationError(message);
-    } finally {
-      setIsSubmitting(false);
+      setIsProcessing(false);
     }
   };
 
@@ -160,8 +196,31 @@ export function WordDraftModal({
         </button>
 
         <div className="border-b-2 border-ink pb-3 mb-5">
-          <div className="text-[10px] font-mono tracking-widest uppercase text-stamp-red font-bold">
-            IMMUTABLE PUBLIC ARCHIVE • WORD #{currentWordCount + 1}
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-stamp-red font-bold">
+              PAYSTACK PAYWALL • WORD #{currentWordCount + 1}
+            </span>
+            {/* Currency Selector */}
+            <div className="flex items-center gap-1 bg-paper-200 border border-ink p-0.5 text-[11px] font-mono">
+              <button
+                type="button"
+                onClick={() => setCurrency('USD')}
+                className={`px-2 py-0.5 font-bold cursor-pointer ${
+                  currency === 'USD' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
+                }`}
+              >
+                USD ($)
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrency('NGN')}
+                className={`px-2 py-0.5 font-bold cursor-pointer ${
+                  currency === 'NGN' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
+                }`}
+              >
+                NGN (₦)
+              </button>
+            </div>
           </div>
           <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-ink">
             Etch Your Word Into History
@@ -192,7 +251,7 @@ export function WordDraftModal({
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-bold font-mono text-xs text-ink">{power.title}</span>
                     <span className="font-mono text-xs font-black px-1.5 py-0.5 bg-ink text-paper-50">
-                      {power.price}
+                      {getPriceDisplay(power.type, currency)}
                     </span>
                   </div>
                   <p className="text-[11px] text-ink-muted font-sans leading-tight">
@@ -229,7 +288,7 @@ export function WordDraftModal({
                 type="text"
                 value={wordText}
                 onChange={(e) => handleWordChange(e.target.value)}
-                placeholder="e.g. relentlessly"
+                placeholder="e.g. unhinged"
                 maxLength={28}
                 autoFocus
                 className="w-full px-3 py-2 border-2 border-ink bg-paper-50 font-typewriter text-xl font-bold text-ink focus:outline-none focus:border-stamp-red"
@@ -241,7 +300,7 @@ export function WordDraftModal({
             </div>
           )}
 
-          {/* Author info */}
+          {/* Author info & optional email for receipt */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-mono uppercase text-ink-muted mb-1 font-bold">
@@ -265,13 +324,13 @@ export function WordDraftModal({
 
             <div>
               <label className="block text-xs font-mono uppercase text-ink-muted mb-1 font-bold">
-                4. Link (Optional URL)
+                4. Email (For Receipt)
               </label>
               <input
-                type="url"
-                value={authorUrl}
-                onChange={(e) => setAuthorUrl(e.target.value)}
-                placeholder="https://yourwebsite.com"
+                type="email"
+                value={authorEmail}
+                onChange={(e) => setAuthorEmail(e.target.value)}
+                placeholder="Optional receipt email"
                 className="w-full px-3 py-1.5 border-2 border-ink bg-paper-50 font-mono text-xs text-ink focus:outline-none"
               />
             </div>
@@ -279,27 +338,28 @@ export function WordDraftModal({
 
           {/* Error notice */}
           {validationError && (
-            <div className="p-2 bg-red-100 border border-stamp-red text-stamp-red text-xs font-mono font-bold">
-              {validationError}
+            <div className="p-2 bg-red-100 border border-stamp-red text-stamp-red text-xs font-mono font-bold flex items-center gap-1.5">
+              <AlertCircle className="w-4 h-4 shrink-0" />
+              <span>{validationError}</span>
             </div>
           )}
 
-          {/* One-Tap Checkout Button */}
+          {/* Paystack Checkout Button */}
           <div className="pt-2">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isProcessing}
               className="w-full py-3.5 px-4 bg-stamp-red text-paper-50 font-mono text-sm font-bold uppercase tracking-wider hover:bg-stamp-redHover btn-brutal flex items-center justify-center gap-2 cursor-pointer"
             >
               <CreditCard className="w-4 h-4" />
               <span>
-                {isSubmitting
-                  ? 'Inscribing Into Stone...'
-                  : `Pay ${currentPrice} & Inscribe Word`}
+                {isProcessing
+                  ? 'Connecting to Paystack...'
+                  : `Pay ${currentPriceDisplay} with Paystack`}
               </span>
             </button>
-            <p className="text-[10px] text-center text-ink-faint font-mono mt-2">
-              🔒 Instant 1-Tap Checkout • Microtransaction simulated for frictionless testing
+            <p className="text-[10px] text-center text-ink-faint font-mono mt-2 flex items-center justify-center gap-1">
+              <span>🔒 Secured by Paystack (Supports Apple Pay, Cards & Bank Transfers)</span>
             </p>
           </div>
         </form>

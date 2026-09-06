@@ -249,7 +249,10 @@ export default function HomePage() {
         }}
         targetWord={targetWord}
         currentWordCount={manifesto?.words.length || 0}
-        onSubmit={handleSubmitWord}
+        onSuccessPlaced={(placedWord) => {
+          setShareWord(placedWord);
+          fetchState();
+        }}
       />
 
       {/* Viral Share Receipt Modal */}

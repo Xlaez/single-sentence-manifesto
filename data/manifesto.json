@@ -15,7 +15,7 @@
       "chapterNumber": 2,
       "title": "Chapter 2: The New Reckoning",
       "isClosed": false,
-      "totalWords": 0,
+      "totalWords": 2,
       "createdAt": "2026-09-06T13:59:10.055Z"
     }
   ],
@@ -137,6 +137,33 @@
         "skull": 0
       },
       "createdAt": "2026-09-06T13:59:10.055Z"
+    },
+    {
+      "id": "w-1788703787745-r8lf",
+      "chapterId": "chap-2",
+      "wordText": "Hello!",
+      "wordIndex": 1,
+      "authorHandle": "elonmusk",
+      "authorUrl": "https://elonmmusk.him",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T14:09:47.745Z"
+    },
+    {
+      "id": "w-1788704335229-yh5p",
+      "chapterId": "chap-2",
+      "wordText": "unstoppable",
+      "wordIndex": 2,
+      "authorHandle": "crypto_king",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T14:18:55.229Z"
     }
   ]
 }
