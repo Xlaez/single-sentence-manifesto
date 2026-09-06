@@ -31,14 +31,20 @@ export function validateWordInput(
     return { isValid: false, error: 'Strictly ONE word allowed per transaction.' };
   }
 
-  // Length constraint: max 28 characters (e.g. antidisestablishmentarianism)
+  // Length constraint: max 28 characters
   if (trimmed.length > 28) {
     return { isValid: false, error: 'Word exceeds the 28-character limit.' };
   }
 
+  // Ensure word contains at least one letter, number, or Unicode emoji
+  const hasValidCharacter = /[\p{L}\p{N}\p{Extended_Pictographic}]/u.test(trimmed);
+  if (!hasValidCharacter) {
+    return { isValid: false, error: 'Word must contain letters, numbers, or emojis.' };
+  }
+
   // Clean and check against blocked list
   const normalized = trimmed.toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (BLOCKED_WORDS.has(normalized)) {
+  if (normalized && BLOCKED_WORDS.has(normalized)) {
     return { isValid: false, error: 'This word violates community guidelines.' };
   }
 

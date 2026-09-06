@@ -9,23 +9,23 @@ A gamified, real-time social experiment where users pay micro-amounts ($1+) to a
 - [x] Design data schema:
   - [x] `Word`: id, chapter_id, word_text, word_index, author_handle, author_url, modifier_type (`standard` | `veto` | `scream` | `redacted` | `period`), reactions (`fire`, `skull`), created_at
   - [x] `Chapter / Volume`: id, chapter_number, title, is_closed, closed_by_handle, total_words, created_at, closed_at
-  - [x] `DraftSession`: active lock / countdown reserving the next slot
+  - [x] `Transaction`: id, reference, amount, currency, status, payer_email, author_handle, word_text, placed_word_id, paid_at
 - [x] Real-time synchronization layer (Server-Sent Events pub/sub) for sub-second updates across all connected clients
 - [x] Content moderation & sanitization (bad word / slur filter, XSS prevention, single-word character limit)
 
 ---
 
 ## ⚡ Phase 2: Game Mechanics & Power-Ups
-- [x] **Standard Word ($1.00)**:
+- [x] **Standard Word ($1.00 / ₦100)**:
   - [x] Append exactly 1 word to the current active sentence
-- [x] **The Strikethrough / Veto ($2.00)**:
+- [x] **The Strikethrough / Veto ($2.00 / ₦200)**:
   - [x] Strike through the previous word (`~word~`) and replace it with a new word
   - [x] Retain audit trail of overridden words on hover
-- [x] **The ALL-CAPS SCREAM ($2.00)**:
+- [x] **The ALL-CAPS SCREAM ($2.00 / ₦200)**:
   - [x] Render word in enlarged, bold, glowing styling
-- [x] **The Redacted CIA Blackout ($1.00)**:
+- [x] **The Redacted CIA Blackout ($1.00 / ₦100)**:
   - [x] Black out a target word like a declassified government doc (tap to reveal original)
-- [x] **The Period / Volume Closer ($5.00)**:
+- [x] **The Period / Volume Closer ($5.00 / ₦500)**:
   - [x] Place a terminal period (`.`)
   - [x] Trigger celebratory UI climax (confetti, audio fanfare)
   - [x] Lock the current Volume into the "Hall of Sacred Texts" and immediately spawn Chapter (N + 1)
@@ -39,44 +39,38 @@ A gamified, real-time social experiment where users pay micro-amounts ($1+) to a
 - [x] **Interactive Word Inspection**:
   - [x] Hover / tap popover showing Word #, Author (@handle + avatar), timestamp, external link
   - [x] Instant reaction buttons (`🔥` Fire / `💀` Skull) with live counter
-- [x] **Mechanical Typewriter Sound & Haptics**:
-  - [x] Satisfying mechanical keystroke sound effect on word placement (`CLACK!`)
-  - [x] Bell ring (`DING!`) on line wraps or volume closures
+- [x] **Mechanical Typewriter Sound**:
+  - [x] Procedural mechanical keystroke sound effect (`CLACK!`) via Web Audio API
+  - [x] Bell ring (`DING!`) on chapter closure
   - [x] Global mute/unmute audio toggle
-- [x] **The Live Drafting Lock**:
-  - [x] 30-second live status banner / real-time feedback
 
 ---
 
-## 💳 Phase 4: Frictionless 1-Tap Payments
-- [x] One-tap simulated guest checkout (Apple Pay / Google Pay / Card microtransaction flow)
-- [x] Zero signup friction: enter @handle + 1 word + 1 tap
-- [x] Immediate payment confirmation & live real-time dispatch
+## 💳 Phase 4: Frictionless Payments & Paystack Paywall
+- [x] Dual-currency support: USD ($) and NGN (₦100 baseline)
+- [x] Paystack Inline Popup integration (`@paystack/inline-js`)
+- [x] Automated webhook handler with HMAC SHA512 signature verification
+- [x] Fallback simulated test mode for local staging
 
 ---
 
-## 🚀 Phase 5: The Viral Screenshot & Social Sharing Flywheel
-- [x] **Dynamic OpenGraph / Canvas Receipt Generator**:
-  - [x] Renders an eye-catching archival 16:9 social share card showing the sentence snippet, highlighted word, author badge, and word number
-- [x] **One-Click Share to X (Twitter)**:
-  - [x] Pre-populated tweet intent deep link: *"I just etched word #X ("word") into The Single-Sentence Manifesto. Try to ruin or veto my word: [URL]"*
-  - [x] Share receipt modal immediately post-payment
+## 🛡️ Phase 5: Database Architecture & Idempotency
+- [x] Supabase PostgreSQL production schema with RLS & compound indexes
+- [x] Dual-engine fallback (Supabase cloud + local persistent store)
+- [x] End-to-end 3-layer idempotency (client debounce + Paystack key + database fulfillment locking via `placed_word_id`)
 
 ---
 
-## 🏆 Phase 6: Hall of Sacred Texts & Leaderboards
-- [x] **Archive of Past Volumes**:
-  - [x] Read-through viewer for completed chapters with credits to the *Closer*
-- [x] **Hall of Clout (Leaderboards)**:
-  - [x] Most Vetoed Words (Battlegrounds)
-  - [x] Top Wordsmiths (most words contributed)
-  - [x] Most Reacted Words (`🔥` / `💀`)
-  - [x] Order of Closers ($5 period finishers)
-
----
-
-## 🧪 Phase 7: Polish, Testing & Verification
-- [x] Tested production Next.js build (`next build`)
-- [x] Verified zero runtime errors and static page optimization
-- [x] Verified full API suite (words, reactions, realtime SSE, chapters, leaderboard)
-- [x] Verified volume closer mechanics and rollover to Chapter 2
+## 🚀 Phase 6: Viral Flywheel, Haptics & Admin Operations
+- [x] **1. Dynamic OpenGraph Social Card (`app/api/og/route.tsx`)**:
+  - [x] Auto-generates 1200x630 retro editorial card with live sentence for X crawlers
+- [x] **2. Live Drafting Lock & FOMO Countdown**:
+  - [x] Live broadcast when someone opens the typewriter (`drafting_started`)
+  - [x] Top banner showing active scribe + 30s countdown to build spectator tension
+- [x] **3. Emoji & Hyphenated Slang Word Support**:
+  - [x] Support Unicode single emojis (`🚀`, `💀`, `🔥`) and compound slang (`super-based`)
+- [x] **4. Mobile Typewriter Haptic Feedback**:
+  - [x] Procedural vibration pulses (`navigator.vibrate([12])`) on mobile keystrokes
+- [x] **5. Owner Admin & Revenue Dashboard (`/admin`)**:
+  - [x] Metrics: Total Revenue (USD + NGN), conversion rates, recent transactions
+  - [x] Real-time financial telemetry & search filters

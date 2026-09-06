@@ -19,8 +19,20 @@ class TypewriterAudioEngine {
     return this.ctx;
   }
 
+  // Tactile haptic vibration for mobile users
+  private triggerHaptic(pattern: number | number[] = 12) {
+    if (typeof window !== 'undefined' && 'navigator' in window && navigator.vibrate) {
+      try {
+        navigator.vibrate(pattern);
+      } catch {
+        // Ignore
+      }
+    }
+  }
+
   // Realistic mechanical keystroke clack
   playClack() {
+    this.triggerHaptic(12);
     if (this.isMuted) return;
     const ctx = this.getContext();
     if (!ctx) return;

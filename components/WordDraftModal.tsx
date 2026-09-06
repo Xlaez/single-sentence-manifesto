@@ -72,6 +72,16 @@ export function WordDraftModal({
     }
   }, [targetWord]);
 
+  useEffect(() => {
+    if (isOpen) {
+      fetch('/api/draft/ping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authorHandle: authorHandle || 'anonymous' }),
+      }).catch(() => {});
+    }
+  }, [isOpen, authorHandle]);
+
   if (!isOpen) return null;
 
   const currentPriceDisplay = getPriceDisplay(modifierType, currency);

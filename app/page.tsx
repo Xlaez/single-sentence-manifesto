@@ -15,6 +15,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDraftOpen, setIsDraftOpen] = useState(false);
   const [targetWord, setTargetWord] = useState<Word | null>(null);
+  const [activeDrafting, setActiveDrafting] = useState<{ authorHandle: string; expiresAt: number } | null>(null);
 
   // Viral share receipt modal state
   const [shareWord, setShareWord] = useState<Word | null>(null);
@@ -49,6 +50,7 @@ export default function HomePage() {
         try {
           const { word } = JSON.parse(e.data);
           typewriterAudio.playClack();
+          setActiveDrafting(null);
           setManifesto((prev) => {
             if (!prev) return prev;
             // Prevent duplicates
@@ -61,6 +63,15 @@ export default function HomePage() {
           });
         } catch (err) {
           console.error('Error handling word_placed event:', err);
+        }
+      });
+
+      eventSource.addEventListener('drafting_active', (e: MessageEvent) => {
+        try {
+          const data = JSON.parse(e.data);
+          setActiveDrafting({ authorHandle: data.authorHandle, expiresAt: data.expiresAt });
+        } catch (err) {
+          console.error('Error handling drafting_active event:', err);
         }
       });
 
@@ -232,6 +243,7 @@ export default function HomePage() {
             words={manifesto.words}
             onOpenDraft={handleOpenDraft}
             onReact={handleReact}
+            activeDrafting={activeDrafting}
           />
         ) : (
           <div className="text-center py-20 font-mono text-ink-muted">

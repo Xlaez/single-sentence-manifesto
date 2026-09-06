@@ -11,6 +11,7 @@ interface TypewriterHeroProps {
   words: Word[];
   onOpenDraft: (targetWord?: Word) => void;
   onReact: (wordId: string, type: 'fire' | 'skull') => void;
+  activeDrafting?: { authorHandle: string; expiresAt: number } | null;
 }
 
 export function TypewriterHero({
@@ -18,9 +19,40 @@ export function TypewriterHero({
   words,
   onOpenDraft,
   onReact,
+  activeDrafting,
 }: TypewriterHeroProps) {
+  const [secondsLeft, setSecondsLeft] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (!activeDrafting) {
+      setSecondsLeft(0);
+      return;
+    }
+    const updateCountdown = () => {
+      const remaining = Math.max(0, Math.ceil((activeDrafting.expiresAt - Date.now()) / 1000));
+      setSecondsLeft(remaining);
+    };
+    updateCountdown();
+    const timer = setInterval(updateCountdown, 1000);
+    return () => clearInterval(timer);
+  }, [activeDrafting]);
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Live Active Drafting Alert (FOMO Banner) */}
+      {activeDrafting && secondsLeft > 0 && (
+        <div className="mb-4 p-3 bg-amber-100 border-2 border-ink shadow-brutal flex items-center justify-between font-mono text-xs animate-pulse-subtle">
+          <div className="flex items-center gap-2 text-ink">
+            <span className="w-2.5 h-2.5 rounded-full bg-stamp-red animate-ping inline-block" />
+            <span className="font-bold text-stamp-red uppercase">LIVE AT THE TYPEWRITER:</span>
+            <span>@{activeDrafting.authorHandle} is drafting Word #{words.length + 1}...</span>
+          </div>
+          <div className="bg-ink text-paper-50 px-2 py-0.5 font-bold">
+            {secondsLeft}s left
+          </div>
+        </div>
+      )}
+
       {/* Chapter Index Strip */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b-2 border-ink pb-2 mb-6 font-mono text-xs text-ink-muted">
         <div className="flex items-center gap-2">

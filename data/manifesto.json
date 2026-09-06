@@ -15,7 +15,7 @@
       "chapterNumber": 2,
       "title": "Chapter 2: The New Reckoning",
       "isClosed": false,
-      "totalWords": 4,
+      "totalWords": 5,
       "createdAt": "2026-09-06T13:59:10.055Z"
     }
   ],
@@ -190,9 +190,36 @@
         "skull": 0
       },
       "createdAt": "2026-09-06T14:50:07.687Z"
+    },
+    {
+      "id": "w-1788707171632-n91e",
+      "chapterId": "chap-2",
+      "wordText": "super-based",
+      "wordIndex": 5,
+      "authorHandle": "slang_master",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T15:06:11.632Z"
     }
   ],
   "transactions": [
+    {
+      "reference": "sim_1788707164408_sw6xa",
+      "amount": 10000,
+      "currency": "NGN",
+      "status": "success",
+      "payerEmail": "slang_master@manifesto.lol",
+      "authorHandle": "slang_master",
+      "wordText": "super-based",
+      "modifierType": "standard",
+      "id": "tx-1788707164409-l3mp",
+      "createdAt": "2026-09-06T15:06:04.409Z",
+      "placedWordId": "w-1788707171632-n91e",
+      "paidAt": "2026-09-06T15:06:11.630Z"
+    },
     {
       "reference": "sim_1788706065366_tb8bw",
       "amount": 10000,
