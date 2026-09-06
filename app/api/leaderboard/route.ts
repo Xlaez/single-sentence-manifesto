@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const data = getLeaderboard();
+    const data = await getLeaderboard();
     return NextResponse.json(data);
   } catch (err) {
     console.error('Error fetching leaderboard:', err);

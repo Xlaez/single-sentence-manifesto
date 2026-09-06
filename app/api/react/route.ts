@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
     }
 
-    const updatedWord = reactToWord(wordId, reactionType);
+    const updatedWord = await reactToWord(wordId, reactionType);
     if (!updatedWord) {
       return NextResponse.json({ error: 'Word not found' }, { status: 404 });
     }

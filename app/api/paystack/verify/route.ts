@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { placeWord } from '@/lib/db';
+import { placeWord, updateTransactionStatus } from '@/lib/db';
 import { PlaceWordPayload } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +15,9 @@ export async function POST(req: Request) {
 
     // 1. Handle Simulated Mode (for testing without live keys)
     if (reference.startsWith('sim_') && simulatedPayload) {
-      const result = placeWord({
+      await updateTransactionStatus(reference, 'success');
+
+      const result = await placeWord({
         wordText: simulatedPayload.wordText,
         authorHandle: simulatedPayload.authorHandle,
         authorUrl: simulatedPayload.authorUrl,
@@ -45,11 +47,14 @@ export async function POST(req: Request) {
 
     const data = await paystackRes.json();
     if (!paystackRes.ok || !data.status || data.data?.status !== 'success') {
+      await updateTransactionStatus(reference, 'failed');
       return NextResponse.json(
         { error: 'Payment verification failed or transaction not completed' },
         { status: 400 }
       );
     }
+
+    await updateTransactionStatus(reference, 'success', data.data.paid_at);
 
     const metadata = data.data.metadata || {};
     const payload: PlaceWordPayload = {
@@ -60,7 +65,7 @@ export async function POST(req: Request) {
       targetWordId: metadata.targetWordId,
     };
 
-    const result = placeWord(payload);
+    const result = await placeWord(payload);
 
     return NextResponse.json({
       success: true,

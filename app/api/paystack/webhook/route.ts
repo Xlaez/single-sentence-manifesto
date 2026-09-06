@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
-import { placeWord } from '@/lib/db';
+import { placeWord, updateTransactionStatus } from '@/lib/db';
 import { PlaceWordPayload } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -24,7 +24,13 @@ export async function POST(req: Request) {
     const event = JSON.parse(rawBody);
 
     if (event.event === 'charge.success') {
+      const reference = event.data?.reference;
       const metadata = event.data?.metadata || {};
+
+      if (reference) {
+        await updateTransactionStatus(reference, 'success', event.data?.paid_at);
+      }
+
       if (metadata.wordText && metadata.authorHandle) {
         const payload: PlaceWordPayload = {
           wordText: metadata.wordText,
@@ -33,7 +39,7 @@ export async function POST(req: Request) {
           modifierType: metadata.modifierType || 'standard',
           targetWordId: metadata.targetWordId,
         };
-        placeWord(payload);
+        await placeWord(payload);
       }
     }
 

@@ -15,7 +15,7 @@
       "chapterNumber": 2,
       "title": "Chapter 2: The New Reckoning",
       "isClosed": false,
-      "totalWords": 2,
+      "totalWords": 3,
       "createdAt": "2026-09-06T13:59:10.055Z"
     }
   ],
@@ -164,6 +164,34 @@
         "skull": 0
       },
       "createdAt": "2026-09-06T14:18:55.229Z"
+    },
+    {
+      "id": "w-1788705656479-qe21",
+      "chapterId": "chap-2",
+      "wordText": "legendary",
+      "wordIndex": 3,
+      "authorHandle": "king_scribe",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T14:40:56.479Z"
+    }
+  ],
+  "transactions": [
+    {
+      "reference": "sim_1788705641361_ett27",
+      "amount": 10000,
+      "currency": "NGN",
+      "status": "success",
+      "payerEmail": "scribe@gmail.com",
+      "authorHandle": "king_scribe",
+      "wordText": "legendary",
+      "modifierType": "standard",
+      "id": "tx-1788705641362-wyfp",
+      "createdAt": "2026-09-06T14:40:41.362Z",
+      "paidAt": "2026-09-06T14:40:56.477Z"
     }
   ]
 }

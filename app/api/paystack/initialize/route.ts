@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { validateWordInput, sanitizeHandle } from '@/lib/moderation';
 import { getAmountInSubunits, SupportedCurrency } from '@/lib/paystack';
 import { ModifierType } from '@/lib/types';
+import { recordTransaction } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,6 +75,19 @@ export async function POST(req: Request) {
         );
       }
 
+      // Record transaction in ledger as initialized
+      await recordTransaction({
+        reference: data.data.reference,
+        amount: amountInSubunits,
+        currency: selectedCurrency,
+        status: 'initialized',
+        payerEmail,
+        authorHandle: cleanHandle,
+        wordText: validation.cleanedWord || wordText,
+        modifierType: modType,
+        targetWordId,
+      });
+
       return NextResponse.json({
         success: true,
         reference: data.data.reference,
@@ -85,6 +99,18 @@ export async function POST(req: Request) {
 
     // Fallback Simulated Transaction (When Paystack keys are not configured yet)
     const simulatedRef = `sim_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    await recordTransaction({
+      reference: simulatedRef,
+      amount: amountInSubunits,
+      currency: selectedCurrency,
+      status: 'initialized',
+      payerEmail,
+      authorHandle: cleanHandle,
+      wordText: validation.cleanedWord || wordText,
+      modifierType: modType,
+      targetWordId,
+    });
+
     return NextResponse.json({
       success: true,
       reference: simulatedRef,

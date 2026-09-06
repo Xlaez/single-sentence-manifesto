@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const state = getManifestoState();
+    const state = await getManifestoState();
     return NextResponse.json(state);
   } catch (err) {
     console.error('Error fetching manifesto state:', err);
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       targetWordId,
     };
 
-    const result = placeWord(payload);
+    const result = await placeWord(payload);
 
     return NextResponse.json({
       success: true,

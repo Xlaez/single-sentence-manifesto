@@ -30,11 +30,29 @@ export interface Chapter {
   closedAt?: string;
 }
 
+export interface Transaction {
+  id: string;
+  reference: string;
+  amount: number; // in subunits (kobo for NGN, cents for USD)
+  currency: 'USD' | 'NGN';
+  status: 'initialized' | 'success' | 'failed';
+  payerEmail: string;
+  authorHandle: string;
+  wordText: string;
+  modifierType: ModifierType;
+  targetWordId?: string;
+  createdAt: string;
+  paidAt?: string;
+  gatewayResponse?: string;
+}
+
 export interface ManifestoState {
   activeChapter: Chapter;
   words: Word[];
   totalVolumesArchived: number;
   totalWordsAllTime: number;
+  totalRevenueNgn?: number;
+  totalRevenueUsd?: number;
 }
 
 export interface PlaceWordPayload {
@@ -44,6 +62,7 @@ export interface PlaceWordPayload {
   modifierType: ModifierType;
   // targetWordId is required for 'veto' or 'redacted' if targeting an existing word
   targetWordId?: string;
+  paymentReference?: string;
 }
 
 export interface ReactionPayload {
