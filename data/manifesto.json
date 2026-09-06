@@ -1,0 +1,142 @@
+{
+  "chapters": [
+    {
+      "id": "chap-1",
+      "chapterNumber": 1,
+      "title": "Chapter I: The First Words of the Hivemind",
+      "isClosed": true,
+      "totalWords": 9,
+      "createdAt": "2026-09-06T12:57:47.071Z",
+      "closedByHandle": "master_closer",
+      "closedAt": "2026-09-06T13:59:10.055Z"
+    },
+    {
+      "id": "chap-2",
+      "chapterNumber": 2,
+      "title": "Chapter 2: The New Reckoning",
+      "isClosed": false,
+      "totalWords": 0,
+      "createdAt": "2026-09-06T13:59:10.055Z"
+    }
+  ],
+  "words": [
+    {
+      "id": "w-1",
+      "chapterId": "chap-1",
+      "wordText": "In",
+      "wordIndex": 1,
+      "authorHandle": "genesis_agent",
+      "authorUrl": "https://x.com",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 15,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T12:59:27.072Z"
+    },
+    {
+      "id": "w-2",
+      "chapterId": "chap-1",
+      "wordText": "the",
+      "wordIndex": 2,
+      "authorHandle": "cyber_scribe",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 5,
+        "skull": 1
+      },
+      "createdAt": "2026-09-06T13:01:07.072Z"
+    },
+    {
+      "id": "w-3",
+      "chapterId": "chap-1",
+      "wordText": "beginning",
+      "wordIndex": 3,
+      "authorHandle": "philosopher_x",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 9,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T13:02:47.072Z"
+    },
+    {
+      "id": "w-4",
+      "chapterId": "chap-1",
+      "wordText": "the",
+      "wordIndex": 4,
+      "authorHandle": "pixel_tycoon",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 3,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T13:04:27.072Z"
+    },
+    {
+      "id": "w-5",
+      "chapterId": "chap-1",
+      "wordText": "INTERNET",
+      "wordIndex": 5,
+      "authorHandle": "loud_keyboard",
+      "modifierType": "scream",
+      "reactions": {
+        "fire": 27,
+        "skull": 2
+      },
+      "createdAt": "2026-09-06T13:06:07.072Z"
+    },
+    {
+      "id": "w-6",
+      "chapterId": "chap-1",
+      "wordText": "demanded",
+      "wordIndex": 6,
+      "authorHandle": "shitpost_daily",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 12,
+        "skull": 1
+      },
+      "createdAt": "2026-09-06T13:07:47.072Z"
+    },
+    {
+      "id": "w-7",
+      "chapterId": "chap-1",
+      "wordText": "chaos",
+      "wordIndex": 7,
+      "authorHandle": "anarchy_dev",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 42,
+        "skull": 3
+      },
+      "createdAt": "2026-09-06T13:09:27.072Z"
+    },
+    {
+      "id": "w-1788703103741-clh1",
+      "chapterId": "chap-1",
+      "wordText": "unleashed",
+      "wordIndex": 8,
+      "authorHandle": "test_user",
+      "modifierType": "standard",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T13:58:23.741Z"
+    },
+    {
+      "id": "w-1788703150055-5y0z",
+      "chapterId": "chap-1",
+      "wordText": ".",
+      "wordIndex": 9,
+      "authorHandle": "master_closer",
+      "modifierType": "period",
+      "reactions": {
+        "fire": 0,
+        "skull": 0
+      },
+      "createdAt": "2026-09-06T13:59:10.055Z"
+    }
+  ]
+}

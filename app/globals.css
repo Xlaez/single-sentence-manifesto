@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,600&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fbf9f5;
+  --foreground: #181716;
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  background-image: radial-gradient(#d6cebf 0.75px, transparent 0.75px), radial-gradient(#d6cebf 0.75px, #fbf9f5 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  min-height: 100vh;
+  font-family: 'Courier Prime', Courier, monospace;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar for typewriter feel */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #ede7dc;
+}
+::-webkit-scrollbar-thumb {
+  background: #8a847a;
+  border-radius: 0px;
+  border: 1px solid #181716;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #181716;
+}
+
+/* Tactile button pressed effect */
+.btn-brutal {
+  transition: all 0.1s ease;
+  box-shadow: 3px 3px 0px 0px #181716;
+}
+.btn-brutal:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #181716;
+}
+.btn-brutal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #181716;
+}
+
+.btn-brutal-red {
+  transition: all 0.1s ease;
+  box-shadow: 3px 3px 0px 0px #181716;
+}
+.btn-brutal-red:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px #ba2d25;
+}
+.btn-brutal-red:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px 0px #181716;
+}
+
+/* Paper card styling */
+.paper-card {
+  background-color: #faf8f5;
+  border: 2px solid #181716;
+  box-shadow: 4px 4px 0px 0px #181716;
+}
+
+/* Redaction hover uncover */
+.redacted-bar {
+  background-color: #181716;
+  color: #181716;
+  user-select: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.redacted-bar:hover {
+  background-color: #ba2d25;
+  color: #faf8f5;
+}
