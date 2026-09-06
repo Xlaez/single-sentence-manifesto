@@ -75,7 +75,7 @@ export function TypewriterHero({
                 className="ml-3 inline-flex items-center gap-1.5 px-3 py-1 bg-ink text-paper-50 text-xs font-mono font-bold uppercase hover:bg-stamp-red btn-brutal transition-colors cursor-pointer align-middle"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Add Word (\$1)</span>
+                <span>Add Word (\$1 / ₦100)</span>
               </button>
             </span>
           )}
@@ -107,7 +107,7 @@ export function TypewriterHero({
           className="w-full sm:w-auto px-6 py-3 bg-stamp-red text-paper-50 font-mono text-xs font-bold uppercase tracking-widest hover:bg-stamp-redHover btn-brutal flex items-center justify-center gap-2 cursor-pointer"
         >
           <PenTool className="w-4 h-4" />
-          <span>Inscribe Word (\$1.00)</span>
+          <span>Inscribe Word (\$1 / ₦100)</span>
         </button>
       </div>
     </div>

@@ -8,33 +8,33 @@ export const PRICING_CONFIG: Record<
 > = {
   standard: {
     usd: 1.0,
-    ngn: 1500,
+    ngn: 100,
     labelUsd: '$1.00',
-    labelNgn: '₦1,500',
+    labelNgn: '₦100',
   },
   veto: {
     usd: 2.0,
-    ngn: 3000,
+    ngn: 200,
     labelUsd: '$2.00',
-    labelNgn: '₦3,000',
+    labelNgn: '₦200',
   },
   scream: {
     usd: 2.0,
-    ngn: 3000,
+    ngn: 200,
     labelUsd: '$2.00',
-    labelNgn: '₦3,000',
+    labelNgn: '₦200',
   },
   redacted: {
     usd: 1.0,
-    ngn: 1500,
+    ngn: 100,
     labelUsd: '$1.00',
-    labelNgn: '₦1,500',
+    labelNgn: '₦100',
   },
   period: {
     usd: 5.0,
-    ngn: 7500,
+    ngn: 500,
     labelUsd: '$5.00',
-    labelNgn: '₦7,500',
+    labelNgn: '₦500',
   },
 };
 

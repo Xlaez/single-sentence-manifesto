@@ -28,7 +28,7 @@ export function Navbar({ activeCount = 1 }: { activeCount?: number }) {
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping inline-block" />
           <span className="text-emerald-400 font-bold">LIVE HIVE-TRANSMISSION</span>
           <span className="hidden sm:inline text-ink-faint">|</span>
-          <span className="hidden sm:inline text-paper-300">ONE DOLLAR PER WORD</span>
+          <span className="hidden sm:inline text-paper-300">$1 / ₦100 PER WORD</span>
         </div>
         <div className="flex items-center gap-4">
           <span className="text-paper-300">{activeCount} Scribes Online</span>
@@ -55,7 +55,7 @@ export function Navbar({ activeCount = 1 }: { activeCount?: number }) {
         </Link>
         <div className="w-24 h-0.5 bg-stamp-red mx-auto my-3" />
         <p className="text-xs sm:text-sm text-ink-muted italic font-serif max-w-lg mx-auto">
-          &ldquo;Every word purchased at \$1 is carved into the permanent record of internet absurdity.&rdquo;
+          &ldquo;Every word purchased at \$1 / ₦100 is carved into the permanent record of internet absurdity.&rdquo;
         </p>
 
         {/* Navigation tabs */}
