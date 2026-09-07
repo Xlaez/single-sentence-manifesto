@@ -42,10 +42,6 @@ export async function POST(req: Request) {
 
     // Check if real Paystack secret key is configured
     if (secretKey && secretKey.startsWith('sk_')) {
-      const channels = selectedCurrency === 'USD'
-        ? ['card', 'apple_pay']
-        : ['card', 'apple_pay', 'bank_transfer', 'bank', 'ussd', 'qr'];
-
       let finalCurrency: SupportedCurrency = selectedCurrency;
       let finalAmount = amountInSubunits;
 
@@ -53,7 +49,6 @@ export async function POST(req: Request) {
         email: payerEmail,
         amount: finalAmount,
         currency: finalCurrency,
-        channels,
         metadata: {
           wordText: validation.cleanedWord || wordText,
           authorHandle: cleanHandle,
@@ -81,8 +76,14 @@ export async function POST(req: Request) {
       // If USD initialization failed because Paystack merchant has not activated USD settlement:
       if ((!paystackRes.ok || !data.status) && selectedCurrency === 'USD') {
         const errMsg = (data.message || '').toLowerCase();
-        if (errMsg.includes('usd') || errMsg.includes('currency') || errMsg.includes('not supported') || errMsg.includes('merchant')) {
-          console.warn('Paystack USD settlement not active on merchant account. Falling back seamlessly to NGN Card/Apple Pay checkout.');
+        if (
+          errMsg.includes('usd') ||
+          errMsg.includes('currency') ||
+          errMsg.includes('not supported') ||
+          errMsg.includes('merchant') ||
+          errMsg.includes('channel')
+        ) {
+          console.warn('Paystack USD settlement not active on merchant account. Falling back seamlessly to NGN Card checkout.');
           finalCurrency = 'NGN';
           finalAmount = getAmountInSubunits(modType, 'NGN');
 
@@ -90,7 +91,6 @@ export async function POST(req: Request) {
             ...paystackPayload,
             currency: finalCurrency,
             amount: finalAmount,
-            channels: ['card', 'apple_pay'],
           };
 
           paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
