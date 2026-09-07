@@ -220,7 +220,7 @@ export function WordDraftModal({
                   currency === 'USD' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
                 }`}
               >
-                💳 Card / Apple Pay ($)
+                💳 Card ($)
               </button>
               <button
                 type="button"
@@ -366,7 +366,7 @@ export function WordDraftModal({
               <span>
                 {isProcessing
                   ? 'Opening Card Gateway...'
-                  : `Pay ${currentPriceDisplay} with ${currency === 'USD' ? 'Card / Apple Pay' : 'Paystack'}`}
+                  : `Pay ${currentPriceDisplay} with ${currency === 'USD' ? 'Card' : 'Paystack'}`}
               </span>
             </button>
             <p className="text-[10px] text-center text-ink-faint font-mono mt-2 flex items-center justify-center gap-1">
