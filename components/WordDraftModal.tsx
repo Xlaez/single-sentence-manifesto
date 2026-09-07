@@ -56,7 +56,7 @@ export function WordDraftModal({
   onSuccessPlaced,
 }: WordDraftModalProps) {
   const [modifierType, setModifierType] = useState<ModifierType>('standard');
-  const [currency, setCurrency] = useState<SupportedCurrency>('USD');
+  const [currency, setCurrency] = useState<SupportedCurrency>('NGN');
   const [wordText, setWordText] = useState('');
   const [authorHandle, setAuthorHandle] = useState('');
   const [authorEmail, setAuthorEmail] = useState('');

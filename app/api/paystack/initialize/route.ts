@@ -69,8 +69,12 @@ export async function POST(req: Request) {
       const data = await paystackRes.json();
       if (!paystackRes.ok || !data.status) {
         console.error('Paystack initialization error:', data);
+        let errorMsg = data.message || 'Failed to initialize Paystack transaction';
+        if (errorMsg.toLowerCase().includes('usd') || errorMsg.toLowerCase().includes('currency')) {
+          errorMsg = 'USD is not enabled on your Paystack merchant profile yet. Please switch to NGN (₦100), which works with all local and international cards!';
+        }
         return NextResponse.json(
-          { error: data.message || 'Failed to initialize Paystack transaction' },
+          { error: errorMsg },
           { status: 400 }
         );
       }

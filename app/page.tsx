@@ -283,9 +283,13 @@ export default function HomePage() {
           The Single-Sentence Manifesto is an immutable social experiment.
           Built for the chaotic minds of X and the digital commons.
         </p>
-        <p className="text-[10px] text-ink-faint mt-2">
-          EST. 2025 • POWERED BY MICROTRANSACTIONS & HUMAN NATURE
-        </p>
+        <div className="flex justify-center items-center gap-4 text-[10px] text-ink-faint mt-3 uppercase tracking-wider">
+          <span>EST. 2025 • POWERED BY MICROTRANSACTIONS</span>
+          <span>•</span>
+          <a href="/admin" className="hover:text-stamp-red transition-colors underline underline-offset-2 flex items-center gap-1">
+            <span>🔒 Operator Admin</span>
+          </a>
+        </div>
       </footer>
     </div>
   );
