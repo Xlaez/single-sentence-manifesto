@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     } = body;
 
     const modType: ModifierType = modifierType || 'standard';
-    const selectedCurrency: SupportedCurrency = currency === 'NGN' ? 'NGN' : 'USD';
+    const selectedCurrency: SupportedCurrency = 'NGN';
 
     // Validate word
     const validation = validateWordInput(wordText, modType);
@@ -37,18 +37,15 @@ export async function POST(req: Request) {
       ? String(email).trim()
       : `${cleanHandle.toLowerCase()}@manifesto.lol`;
 
-    const amountInSubunits = getAmountInSubunits(modType, selectedCurrency);
+    const amountInSubunits = getAmountInSubunits(modType, 'NGN');
     const secretKey = process.env.PAYSTACK_SECRET_KEY?.trim();
 
     // Check if real Paystack secret key is configured
     if (secretKey && secretKey.startsWith('sk_')) {
-      let finalCurrency: SupportedCurrency = selectedCurrency;
-      let finalAmount = amountInSubunits;
-
-      let paystackPayload: Record<string, unknown> = {
+      const paystackPayload = {
         email: payerEmail,
-        amount: finalAmount,
-        currency: finalCurrency,
+        amount: amountInSubunits,
+        currency: 'NGN',
         metadata: {
           wordText: validation.cleanedWord || wordText,
           authorHandle: cleanHandle,
@@ -62,7 +59,7 @@ export async function POST(req: Request) {
         },
       };
 
-      let paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
+      const paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${secretKey}`,
@@ -71,40 +68,7 @@ export async function POST(req: Request) {
         body: JSON.stringify(paystackPayload),
       });
 
-      let data = await paystackRes.json();
-
-      // If USD initialization failed because Paystack merchant has not activated USD settlement:
-      if ((!paystackRes.ok || !data.status) && selectedCurrency === 'USD') {
-        const errMsg = (data.message || '').toLowerCase();
-        if (
-          errMsg.includes('usd') ||
-          errMsg.includes('currency') ||
-          errMsg.includes('not supported') ||
-          errMsg.includes('merchant') ||
-          errMsg.includes('channel')
-        ) {
-          console.warn('Paystack USD settlement not active on merchant account. Falling back seamlessly to NGN Card checkout.');
-          finalCurrency = 'NGN';
-          finalAmount = getAmountInSubunits(modType, 'NGN');
-
-          paystackPayload = {
-            ...paystackPayload,
-            currency: finalCurrency,
-            amount: finalAmount,
-          };
-
-          paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${secretKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(paystackPayload),
-          });
-
-          data = await paystackRes.json();
-        }
-      }
+      const data = await paystackRes.json();
 
       if (!paystackRes.ok || !data.status) {
         console.error('Paystack initialization error:', data);
@@ -117,8 +81,8 @@ export async function POST(req: Request) {
       // Record transaction in ledger as initialized
       await recordTransaction({
         reference: data.data.reference,
-        amount: finalAmount,
-        currency: finalCurrency,
+        amount: amountInSubunits,
+        currency: 'NGN',
         status: 'initialized',
         payerEmail,
         authorHandle: cleanHandle,

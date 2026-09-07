@@ -56,7 +56,7 @@ export function WordDraftModal({
   onSuccessPlaced,
 }: WordDraftModalProps) {
   const [modifierType, setModifierType] = useState<ModifierType>('standard');
-  const [currency, setCurrency] = useState<SupportedCurrency>('USD');
+  const currency: SupportedCurrency = 'NGN';
   const [wordText, setWordText] = useState('');
   const [authorHandle, setAuthorHandle] = useState('');
   const [authorEmail, setAuthorEmail] = useState('');
@@ -211,27 +211,9 @@ export function WordDraftModal({
             <span className="text-[10px] font-mono tracking-widest uppercase text-stamp-red font-bold">
               PAYSTACK PAYWALL • WORD #{currentWordCount + 1}
             </span>
-            {/* Currency Selector */}
-            <div className="flex items-center gap-1 bg-paper-200 border border-ink p-0.5 text-[11px] font-mono">
-              <button
-                type="button"
-                onClick={() => setCurrency('USD')}
-                className={`px-2 py-0.5 font-bold cursor-pointer transition-colors ${
-                  currency === 'USD' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
-                }`}
-              >
-                💳 Card ($)
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrency('NGN')}
-                className={`px-2 py-0.5 font-bold cursor-pointer transition-colors ${
-                  currency === 'NGN' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
-                }`}
-              >
-                ₦ Local (NGN)
-              </button>
-            </div>
+            <span className="px-2 py-0.5 bg-paper-200 border border-ink text-ink font-mono text-[10px] font-bold tracking-wider">
+              ₦ NGN
+            </span>
           </div>
           <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-ink">
             Etch Your Word Into History
@@ -365,16 +347,12 @@ export function WordDraftModal({
               <CreditCard className="w-4 h-4" />
               <span>
                 {isProcessing
-                  ? 'Opening Card Gateway...'
-                  : `Pay ${currentPriceDisplay} with ${currency === 'USD' ? 'Card' : 'Paystack'}`}
+                  ? 'Connecting to Paystack...'
+                  : `Pay ${currentPriceDisplay} with Paystack`}
               </span>
             </button>
             <p className="text-[10px] text-center text-ink-faint font-mono mt-2 flex items-center justify-center gap-1">
-              <span>
-                {currency === 'USD'
-                  ? '🔒 Instant Card Checkout • All US/UK/EU & international cards accepted'
-                  : '🔒 Secured by Paystack • Cards, Bank Transfers & USSD accepted'}
-              </span>
+              <span>🔒 Secured by Paystack • Bank Transfer, USSD, OPay & Cards accepted</span>
             </p>
           </div>
         </form>

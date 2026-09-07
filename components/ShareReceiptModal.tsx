@@ -121,7 +121,7 @@ export function ShareReceiptModal({
             </div>
             <div className="text-right">
               <div className="inline-block border-2 border-ink px-2 py-1 bg-amber-100 text-ink font-bold text-[11px] uppercase tracking-wider">
-                \$1.00 USD • IMMUTABLE
+                {word.modifierType === 'period' ? '₦500' : (word.modifierType === 'veto' || word.modifierType === 'scream') ? '₦200' : '₦100'} NGN • IMMUTABLE
               </div>
             </div>
           </div>
