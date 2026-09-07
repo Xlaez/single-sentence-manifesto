@@ -56,7 +56,7 @@ export function WordDraftModal({
   onSuccessPlaced,
 }: WordDraftModalProps) {
   const [modifierType, setModifierType] = useState<ModifierType>('standard');
-  const [currency, setCurrency] = useState<SupportedCurrency>('NGN');
+  const [currency, setCurrency] = useState<SupportedCurrency>('USD');
   const [wordText, setWordText] = useState('');
   const [authorHandle, setAuthorHandle] = useState('');
   const [authorEmail, setAuthorEmail] = useState('');
@@ -216,20 +216,20 @@ export function WordDraftModal({
               <button
                 type="button"
                 onClick={() => setCurrency('USD')}
-                className={`px-2 py-0.5 font-bold cursor-pointer ${
+                className={`px-2 py-0.5 font-bold cursor-pointer transition-colors ${
                   currency === 'USD' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
                 }`}
               >
-                USD ($)
+                💳 Card / Apple Pay ($)
               </button>
               <button
                 type="button"
                 onClick={() => setCurrency('NGN')}
-                className={`px-2 py-0.5 font-bold cursor-pointer ${
+                className={`px-2 py-0.5 font-bold cursor-pointer transition-colors ${
                   currency === 'NGN' ? 'bg-ink text-paper-50' : 'text-ink hover:bg-paper-300'
                 }`}
               >
-                NGN (₦)
+                ₦ Local (NGN)
               </button>
             </div>
           </div>
@@ -360,17 +360,21 @@ export function WordDraftModal({
             <button
               type="submit"
               disabled={isProcessing}
-              className="w-full py-3.5 px-4 bg-stamp-red text-paper-50 font-mono text-sm font-bold uppercase tracking-wider hover:bg-stamp-redHover btn-brutal flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 px-4 bg-stamp-red text-paper-50 font-mono text-sm font-bold uppercase tracking-wider hover:bg-stamp-redHover btn-brutal flex items-center justify-center gap-2 cursor-pointer transition-all"
             >
               <CreditCard className="w-4 h-4" />
               <span>
                 {isProcessing
-                  ? 'Connecting to Paystack...'
-                  : `Pay ${currentPriceDisplay} with Paystack`}
+                  ? 'Opening Card Gateway...'
+                  : `Pay ${currentPriceDisplay} with ${currency === 'USD' ? 'Card / Apple Pay' : 'Paystack'}`}
               </span>
             </button>
             <p className="text-[10px] text-center text-ink-faint font-mono mt-2 flex items-center justify-center gap-1">
-              <span>🔒 Secured by Paystack (Supports Apple Pay, Cards & Bank Transfers)</span>
+              <span>
+                {currency === 'USD'
+                  ? '🔒 Instant Card Checkout • All US/UK/EU & international cards accepted'
+                  : '🔒 Secured by Paystack • Cards, Bank Transfers & USSD accepted'}
+              </span>
             </p>
           </div>
         </form>

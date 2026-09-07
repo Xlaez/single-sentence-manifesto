@@ -42,39 +42,74 @@ export async function POST(req: Request) {
 
     // Check if real Paystack secret key is configured
     if (secretKey && secretKey.startsWith('sk_')) {
-      const paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
+      const channels = selectedCurrency === 'USD'
+        ? ['card', 'apple_pay']
+        : ['card', 'apple_pay', 'bank_transfer', 'bank', 'ussd', 'qr'];
+
+      let finalCurrency: SupportedCurrency = selectedCurrency;
+      let finalAmount = amountInSubunits;
+
+      let paystackPayload: Record<string, unknown> = {
+        email: payerEmail,
+        amount: finalAmount,
+        currency: finalCurrency,
+        channels,
+        metadata: {
+          wordText: validation.cleanedWord || wordText,
+          authorHandle: cleanHandle,
+          authorUrl: authorUrl ? String(authorUrl).trim() : undefined,
+          modifierType: modType,
+          targetWordId,
+          custom_fields: [
+            { display_name: 'Word Inscribed', variable_name: 'word_inscribed', value: validation.cleanedWord || wordText },
+            { display_name: 'Author X Handle', variable_name: 'x_handle', value: `@${cleanHandle}` },
+          ],
+        },
+      };
+
+      let paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${secretKey}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          email: payerEmail,
-          amount: amountInSubunits,
-          currency: selectedCurrency,
-          metadata: {
-            wordText: validation.cleanedWord || wordText,
-            authorHandle: cleanHandle,
-            authorUrl: authorUrl ? String(authorUrl).trim() : undefined,
-            modifierType: modType,
-            targetWordId,
-            custom_fields: [
-              { display_name: 'Word Inscribed', variable_name: 'word_inscribed', value: validation.cleanedWord || wordText },
-              { display_name: 'Author X Handle', variable_name: 'x_handle', value: `@${cleanHandle}` },
-            ],
-          },
-        }),
+        body: JSON.stringify(paystackPayload),
       });
 
-      const data = await paystackRes.json();
+      let data = await paystackRes.json();
+
+      // If USD initialization failed because Paystack merchant has not activated USD settlement:
+      if ((!paystackRes.ok || !data.status) && selectedCurrency === 'USD') {
+        const errMsg = (data.message || '').toLowerCase();
+        if (errMsg.includes('usd') || errMsg.includes('currency') || errMsg.includes('not supported') || errMsg.includes('merchant')) {
+          console.warn('Paystack USD settlement not active on merchant account. Falling back seamlessly to NGN Card/Apple Pay checkout.');
+          finalCurrency = 'NGN';
+          finalAmount = getAmountInSubunits(modType, 'NGN');
+
+          paystackPayload = {
+            ...paystackPayload,
+            currency: finalCurrency,
+            amount: finalAmount,
+            channels: ['card', 'apple_pay'],
+          };
+
+          paystackRes = await fetch('https://api.paystack.co/transaction/initialize', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${secretKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(paystackPayload),
+          });
+
+          data = await paystackRes.json();
+        }
+      }
+
       if (!paystackRes.ok || !data.status) {
         console.error('Paystack initialization error:', data);
-        let errorMsg = data.message || 'Failed to initialize Paystack transaction';
-        if (errorMsg.toLowerCase().includes('usd') || errorMsg.toLowerCase().includes('currency')) {
-          errorMsg = 'USD is not enabled on your Paystack merchant profile yet. Please switch to NGN (₦100), which works with all local and international cards!';
-        }
         return NextResponse.json(
-          { error: errorMsg },
+          { error: data.message || 'Failed to initialize Paystack transaction' },
           { status: 400 }
         );
       }
@@ -82,8 +117,8 @@ export async function POST(req: Request) {
       // Record transaction in ledger as initialized
       await recordTransaction({
         reference: data.data.reference,
-        amount: amountInSubunits,
-        currency: selectedCurrency,
+        amount: finalAmount,
+        currency: finalCurrency,
         status: 'initialized',
         payerEmail,
         authorHandle: cleanHandle,
